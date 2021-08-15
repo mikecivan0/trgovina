@@ -1,0 +1,89 @@
+package com.mikec.trgovina;
+
+/**
+ *
+ * @author Ivan
+ */
+public class Stanje extends Artikal{
+    private Artikal artikal;
+    private double raspolozivo;
+    private double prodano;
+
+    public Stanje() {
+    }
+
+    public Stanje(
+            Artikal artikal, 
+            double raspolozivo, 
+            double prodano) {
+        this.artikal = artikal;
+        this.raspolozivo = raspolozivo;
+        this.prodano = prodano;
+    }
+
+    public Stanje(
+            Kategorija kategorija,
+            String naziv, 
+            double cijena, 
+            boolean akcija, 
+            double akcijskaCijena,
+            String opis,
+            double raspolozivo, 
+            double prodano) {
+        super(kategorija, naziv, cijena, akcija, akcijskaCijena, opis);
+        this.raspolozivo = raspolozivo;
+        this.prodano = prodano;
+    }
+
+    public Stanje(
+            String nazivKategorije,             
+            String naziv,
+            double cijena, 
+            boolean akcija, 
+            double akcijskaCijena, 
+            String opis,
+            double raspolozivo, 
+            double prodano) {
+        super(nazivKategorije, naziv, cijena, akcija, akcijskaCijena, opis);
+        this.raspolozivo = raspolozivo;
+        this.prodano = prodano;
+    }
+
+    public Artikal getArtikal() {
+        return artikal;
+    }
+
+    public void setArtikal(Artikal artikal) {
+        this.artikal = artikal;
+    }
+
+    public double getRaspolozivo() {
+        return raspolozivo;
+    }
+
+    public void setRaspolozivo(double raspolozivo) {
+        this.raspolozivo = raspolozivo;
+    }
+
+    public double getProdano() {
+        return prodano;
+    }
+
+    public void setProdano(double prodano) {
+        this.prodano = prodano;
+    }
+
+    @Override
+    public String toString() {
+        return "Trenutno na stanju:\n" 
+                + "Naziv akrtikla: " + artikal 
+                + "(kategorija: " + this.getArtikal().getKategorija().getNaziv() 
+                + ")\n"
+                + "Raspoloživo: " + raspolozivo + "\n"
+                + "Prodano: " + prodano;
+    }
+    
+    
+    
+    
+}
