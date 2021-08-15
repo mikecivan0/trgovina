@@ -15,27 +15,51 @@ import java.util.Scanner;
 public class Start {
 
     private static final double STOPA_POREZA = 25.0;
-	public static final String LINK_GITHUB = "https://github.com/mikecivan0/trgovina";
-	public static final String LINK_ER_DIJAGRAM = "https://github.com/mikecivan0/RasporedRada/blob/main/src/raspored_rada.png";
-	private List<Osoba> osobe;
-	private List<Korisnik> korisnici;
-	private List<Korisnik> aktivniKorisnici;
-	private Korisnik trenutniKorisnik;
-	private boolean valjanost;
-	private String porukaIzboraAkcije = "Unesite neku od gore ponuđenih stavki: ";
-	private String porukaGreskeIzboraAkcije = "Nepostojeći izbor";
-	private String porukaGreskePraznogUnosa = "Unos ne smije biti prazan";
-	private String porukaGreskeUnosaCijelogBroja = "Molimo unesite cijeli broj";
-	private String porukaGreskeDaNe = "Molimo unesite da ili ne";
-	private String porukaGreskeNemaOsoba = "\nU bazi nema niti jedne osobe";
-	private String porukaGreskeNemaKorisnika = "\nU bazi nema niti jednog korisnika";
-	SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
-        
+    public static final String LINK_GITHUB = "https://github.com/mikecivan0/trgovina";
+    public static final String LINK_ER_DIJAGRAM = "https://github.com/mikecivan0/trgovina/blob/master/Trgovina/database.png";
+    private List<Osoba> osobe;
+    private List<Korisnik> korisnici;
+    private List<Korisnik> aktivniKorisnici;
+    private Korisnik trenutniKorisnik;
+    private boolean valjanost;
+    private String porukaIzboraAkcije = "Unesite neku od gore ponuđenih stavki: ";
+    private String porukaGreskeIzboraAkcije = "Nepostojeći izbor";
+    private String porukaGreskePraznogUnosa = "Unos ne smije biti prazan";
+    private String porukaGreskeUnosaCijelogBroja = "Molimo unesite cijeli broj";
+    private String porukaGreskeDaNe = "Molimo unesite da ili ne";
+    private String porukaGreskeNemaOsoba = "\nU bazi nema niti jedne osobe";
+    private String porukaGreskeNemaKorisnika = "\nU bazi nema niti jednog korisnika";
+    SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
+
     public static void main(String[] args) {
         new Start();
     }
 
     public Start() {
+        korisnici = new ArrayList<Korisnik>();
+        aktivniKorisnici = new ArrayList<Korisnik>();
+        osobe = new ArrayList<Osoba>();
+        trenutniKorisnik = new Korisnik();
+        valjanost = false;
+       
+
+        /**
+         * početak probnih podataka
+         */
+        
+        // probni podaci nove osobe
+        osobe.add(new Osoba("Ivan", "Mikec", "091", "email"));
+        osobe.add(new Osoba("Netko", "Drugi", "091", "email"));
+        osobe.add(new Osoba("Netko", "Treći", "091", "email"));
+
+        // probni podaci novog korisnika
+        korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", 2, true));
+        korisnici.add(new Korisnik(osobe.get(1), "on", "on", 1, true));
+        
+        /**          
+         * KRAJ PROBNIH PODATAKA
+         */
+        
         Alati.scanner = new Scanner(System.in);
         glavniIzbornik();
     }
@@ -83,19 +107,11 @@ public class Start {
         }
     }
 
-    private void logiranjePonovniPokusaj() {
-        if (Alati.daNe("Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
-            login();
-        } else {
-            glavniIzbornik();
-        }
-    }
-
     private void login() {
         Korisnik korisnik = new Korisnik();
         Alati.ispisZaglavlja("Podaci za prijavu u aplikaciju", true);
-        korisnik.setKorisnickoIme(Alati.ucitajString("korisničko ime: ", porukaGreskePraznogUnosa, 1, 15));
-        korisnik.setLozinka(Alati.ucitajString("lozinka: ", porukaGreskePraznogUnosa, 1, 30));
+        korisnik.setKorisnickoIme(Alati.ucitajString("Korisničko ime: ", porukaGreskePraznogUnosa, 1, 15));
+        korisnik.setLozinka(Alati.ucitajString("Lozinka: ", porukaGreskePraznogUnosa, 1, 30));
         provjeraVjerodajnica(korisnik);
     }
 
@@ -117,7 +133,7 @@ public class Start {
         }
 
         if (valjanost) {
-            if (trenutniKorisnik.getRazina()==1) {
+            if (trenutniKorisnik.getRazina() == 1) {
                 trgovacGlavniIzbornik();
             } else {
                 adminGlavniIzbornik();
@@ -125,11 +141,19 @@ public class Start {
         } else {
             System.out.println("Nevaljana kombinacija korisničkog imena i lozinke");
             logiranjePonovniPokusaj();
+        }  
+    }
+    
+    private void logiranjePonovniPokusaj() {
+        if (Alati.daNe("Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
+            login();
+        } else {
+            glavniIzbornik();
         }
     }
 
     private void trgovacGlavniIzbornik() {
- 
+
     }
 
     private void adminGlavniIzbornik() {
