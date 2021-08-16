@@ -23,7 +23,7 @@ public class Alati {
     public static Date ucitajDatum(String poruka) {
         formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
         while (true) {
-            System.out.print(poruka);
+            System.out.println(poruka);
             try {
                 return formatDatuma.parse(scanner.nextLine());
             } catch (Exception e) {

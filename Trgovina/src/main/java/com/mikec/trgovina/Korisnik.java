@@ -101,5 +101,9 @@ public class Korisnik extends Osoba {
                 + "Razina: " + razina + "\n"
                 + "Aktivan: " + Alati.parseBool(aktivan);
     }
+    
+    public String korisnikZaPrikaz(){
+        return korisnickoIme + ", " + this.getOsoba().imeIPrezime();
+    }
 
 }

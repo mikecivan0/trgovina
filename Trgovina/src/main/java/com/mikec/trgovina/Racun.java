@@ -8,6 +8,7 @@ import java.util.Date;
  */
 public class Racun extends Klijent{
     private Klijent klijent;
+    private String broj;
     private Date datum;
     private double netto;
     private double porez;
@@ -18,11 +19,13 @@ public class Racun extends Klijent{
 
     public Racun(
             Klijent klijent, 
+            String broj,
             Date datum, 
             double netto, 
             double porez, 
             double ukupno) {
         this.klijent = klijent;
+        this.broj = broj;
         this.datum = datum;
         this.netto = netto;
         this.porez = porez;
@@ -33,12 +36,14 @@ public class Racun extends Klijent{
             Osoba osoba, 
             String ulicaiKbr, 
             String mjesto, 
-            String pbr,         
-            Date datum, 
+            String pbr,
+            String broj,         
+            Date datum,             
             double netto, 
             double porez, 
             double ukupno) {
         super(osoba, ulicaiKbr, mjesto, pbr);
+        this.broj = broj;
         this.datum = datum;
         this.netto = netto;
         this.porez = porez;
@@ -53,11 +58,13 @@ public class Racun extends Klijent{
             String ulicaiKbr, 
             String mjesto, 
             String pbr,
+            String broj,
             Date datum, 
             double netto, 
             double porez, 
             double ukupno) {
         super(ime, prezime, telefon, email, ulicaiKbr, mjesto, pbr);
+        this.broj = broj;
         this.datum = datum;
         this.netto = netto;
         this.porez = porez;
@@ -70,6 +77,14 @@ public class Racun extends Klijent{
 
     public void setKlijent(Klijent klijent) {
         this.klijent = klijent;
+    }
+    
+    public String getBroj() {
+        return broj;
+    }
+
+    public void setBroj(String broj) {
+        this.broj = broj;
     }
 
     public Date getDatum() {
@@ -107,13 +122,10 @@ public class Racun extends Klijent{
     @Override
     public String toString() {
         return "Datum računa: " + Alati.hrDatum(datum) + "\n"
+                + "Broj računa: " + broj + "\n"
                 + "Klijent: " + this.getOsoba().imeIPrezime() + this.getKlijent().adresa() + "\n"
                 + "Netto iznos: " + netto + "\n"
                 + "Iznos poreza: " + porez + "\n"
                 + "Ukupno za naplatu: " + ukupno;
-    }
-    
-    
-    
-    
+    }    
 }
