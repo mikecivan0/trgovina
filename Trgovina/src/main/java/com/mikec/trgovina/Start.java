@@ -13,7 +13,7 @@ public class Start {
 
     private static final double STOPA_POREZA = 25.0;
     public static final String LINK_GITHUB = "https://github.com/mikecivan0/trgovina";
-    public static final String LINK_ER_DIJAGRAM = "https://github.com/mikecivan0/trgovina/blob/master/Trgovina/database.png";
+    public static final String LINK_ER_DIJAGRAM = "https://github.com/mikecivan0/trgovina/blob/master/Trgovina/trgovina-database.png";
     private List<Osoba> osobe;
     private List<Korisnik> korisnici;
     private Korisnik trenutniKorisnik;
