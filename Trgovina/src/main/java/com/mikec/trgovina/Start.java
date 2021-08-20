@@ -18,12 +18,12 @@ public class Start {
 	private List<Korisnik> korisnici;
 	private List<Kategorija> kategorije;
 	private List<Artikal> artikli;
+	private List<Stanje> stanja;
 	private Korisnik trenutniKorisnik;
 	private boolean valjanost;
 	private final String porukaIzboraAkcije;
 	private final String porukaGreskeIzboraAkcije;
 	private final String porukaGreskePraznogUnosa;
-	private final String porukaGreskeUnosaCijelogBroja;
 	private final String porukaGreskeDaNe;
 	private final String porukaGreskeNemaOsoba;
 	private final String porukaGreskeNemaKorisnika;
@@ -39,7 +39,6 @@ public class Start {
 		porukaIzboraAkcije = "\nUnesite neku od gore ponuđenih stavki: ";
 		porukaGreskeIzboraAkcije = "Nepostojeći izbor";
 		porukaGreskePraznogUnosa = "Unos ne smije biti prazan";
-		porukaGreskeUnosaCijelogBroja = "Molimo unesite cijeli broj";
 		porukaGreskeDaNe = "Molimo unesite da ili ne";
 		porukaGreskeNemaOsoba = "\nU bazi nema niti jedne osobe";
 		porukaGreskeNemaKorisnika = "\nU bazi nema niti jednog korisnika";
@@ -50,6 +49,7 @@ public class Start {
 		kategorije = new ArrayList<Kategorija>();
 		trenutniKorisnik = new Korisnik();
 		artikli = new ArrayList<Artikal>();
+		stanja = new ArrayList<Stanje>();
 		formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
 		valjanost = false;
 
@@ -64,6 +64,39 @@ public class Start {
 		// probni podaci novog korisnika
 		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", 2, true));
 		korisnici.add(new Korisnik(osobe.get(1), "on", "on", 1, true));
+		
+		// probni podaci kategorija
+		kategorije.add(new Kategorija("Mali kućanski uređaji"));
+		kategorije.add(new Kategorija("Voće"));
+		
+		// probni podaci artikala
+		artikli.add(new Artikal(kategorije.get(0), 
+				"Mikser", 
+				120, 
+				false, 
+				0, 
+				"Opis miksera"));
+		artikli.add(new Artikal(kategorije.get(0), 
+				"Fen", 
+				250, 
+				true, 
+				120, 
+				"Opis fena"));
+		artikli.add(new Artikal(kategorije.get(1), 
+				"Jabuka", 
+				12, 
+				false, 
+				0, 
+				"Opis jabuke"));
+		artikli.add(new Artikal(kategorije.get(1), 
+				"Kruška", 
+				25, 
+				true, 
+				19, 
+				"Opis kruške"));
+		
+		// probni podaci stanja
+		stanja.add(new Stanje(artikli.get(0),1,5));
 
 		/**
 		 * KRAJ PROBNIH PODATAKA
@@ -200,21 +233,23 @@ public class Start {
 		System.out.println("2 za rad sa korisnicima");
 		System.out.println("3 za rad sa kategorijama artikala");
 		System.out.println("4 za rad sa artiklima");
-		System.out.println("5 za rad sa podacima klijenata");
-		System.out.println("6 za rad sa računima");
-		System.out.println("7 za odjavu iz aplikacije");
+		System.out.println("5 za rad sa lagerom");
+		System.out.println("6 za rad sa podacima klijenata");
+		System.out.println("7 za rad sa računima");
+		System.out.println("8 za odjavu iz aplikacije");
 		adminGlavniIzbornikOdabirAkcije();
 	}
 
 	private void adminGlavniIzbornikOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 7)) {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 8)) {
 			case 1 -> osobeIzbornik();
 			case 2 -> korisniciIzbornik();
 			case 3 -> kategorijeIzbornik();
             case 4 -> artikliIzbornik();
+            case 5 -> stanjaIzbornik();
 //            case 5 -> klijentiIzbornik();
 //            case 6 -> racuniIzbornik();
-		case 7 -> {
+		case 8 -> {
 			logout();
 			glavniIzbornik();
 		}
@@ -367,7 +402,7 @@ public class Start {
 		nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
 		if (!nadjeneOsobe.isEmpty()) {
 			osobeIzlistanje("Pronađene osobe", nadjeneOsobe);
-			izbor = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
+			izbor = Alati.ucitajBroj("Unesite broj osobe koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 					nadjeneOsobe.size()) - 1;
 			indeksOdabraneOsobe = osobeIndeksOsobeIzIzvorneListe(nadjeneOsobe.get(izbor));
 			if (Alati.daNe(
@@ -1094,10 +1129,12 @@ public class Start {
 		switch(Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
 		case 1 -> artikliUnosNovog();
 		case 2 -> artikliIzmjena();
+		case 3 -> artikliBrisanje();
 		case 4 -> {
 			artikliIzlistanje();
 			artikliIzbornik();
 			}
+		case 5 -> artikliDetalji();
 		case 6 -> {
 				if(trenutniKorisnik.getRazina() == 1) {
 					djelatnikGlavniIzbornik();
@@ -1195,7 +1232,8 @@ public class Start {
 			System.out.println(artikal.toString());
 			naziv = Alati.ucitajString("\nUnesite naziv artikla: ", porukaGreskePraznogUnosa, 1, 50);
 			if (!artikliPostojiLi(artikal, naziv)) {
-				a = artikliUcitajOstaleVrijednosti(naziv);
+				artikal.setNaziv(naziv);
+				a = artikliUcitajOstaleVrijednosti(artikal);
 				artikli.set(i, a);
 				System.out.println("\nArtikal je izmijenjen");
 			} else {
@@ -1205,6 +1243,144 @@ public class Start {
 				}
 			}
 			break;
+		}
+	}
+	
+	private void artikliBrisanje() {
+		if (!artikli.isEmpty()) {
+			artikliIspisIzboraPretrage("Brisanje artikla");
+			artikliUcitajOdabirPretrageZaBrisanje();
+		} else {
+			System.out.println(porukaGreskeNemaOsoba);
+			artikliIzbornik();
+		}
+	}
+	
+	private void artikliUcitajOdabirPretrageZaBrisanje() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+			case 1 -> artikliBrisanjePoIndeksu();
+			case 2 -> artikliBrisanjePoImenu();
+			}		
+	}
+
+	private void artikliBrisanjePoIndeksu() {
+		int i;
+		artikliIzlistanje();
+		i = Alati.ucitajBroj("Unesite broj artikla koji želite obrisati: ", porukaGreskeIzboraAkcije, 1, artikli.size())
+				- 1;
+		if (Alati.daNe("Želite li zaista obrisati artikal " + artikli.get(i).getNaziv() + " (da/ne): ",
+				porukaGreskeDaNe)) {
+			if (!stanjaPostojanjeArtiklaNaStanju(artikli.get(i))) {
+				artikli.remove(i);
+				System.out.println("\nArtikal je obrisan.");
+			} else {
+				System.out.println("\nOdabrani artikal je upisan u lager i stoga se ne može obisati.");
+			}
+		}
+		artikliIzbornik();
+	}
+	
+	private void  artikliBrisanjePoImenu() {
+		String uvjet;
+		int izbor, indeksOdabranogArtikla;
+		List<Artikal> nadjeniArtikli = new ArrayList<Artikal>();
+		uvjet = Alati.ucitajString("Upišite naziv artikla koji tražite: ", porukaGreskePraznogUnosa, 0, 30);
+		nadjeniArtikli = artikliPronadjiPoUvjetu(uvjet);
+		if (!nadjeniArtikli.isEmpty()) {
+			artikliIzlistanje("Pronađeni artikli", nadjeniArtikli);
+			izbor = Alati.ucitajBroj("Unesite broj artikla koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+					nadjeniArtikli.size()) - 1;
+			indeksOdabranogArtikla = artikliIndeksArtiklaIzIzvorneListe(nadjeniArtikli.get(izbor));
+			if (Alati.daNe(
+					"Želite li zaista obrisati artikal " + artikli.get(indeksOdabranogArtikla).getNaziv() + " (da/ne): ",
+					porukaGreskeDaNe)) {
+				if (!stanjaPostojanjeArtiklaNaStanju(artikli.get(indeksOdabranogArtikla))) {
+					artikli.remove(indeksOdabranogArtikla);
+					System.out.println("\nArtikal je obrisan.");
+				} else {
+					System.out.println("\nOdabrani artikal se nalazi na lageru i stoga ga ne možete obrisati.");
+				}
+			}
+		} else {
+			System.out.println("\nNema rezultata koji dogovaraju zadanom kriteriju. ");
+			if (Alati.daNe("Želite li pokušati opet? (da/ne): ", porukaGreskeDaNe)) {
+				artikliBrisanjePoImenu();
+			}
+		}
+		artikliIzbornik();
+	}
+
+	private void artikliDetalji() {
+		if (!artikli.isEmpty()) {
+			artikliIspisIzboraPretrage("Detalji artikla");
+			artikliUcitajOdabirPretrageZaDetalje();
+		} else {
+			System.out.println(porukaGreskeNemaArtikala);
+			artikliIzbornik();
+		}
+	}
+
+	private void artikliUcitajOdabirPretrageZaDetalje() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+		case 1 -> artikliDetaljiPoIndeksu();
+		case 2 -> artikliDetaljiPoNazivu();
+		}
+	}
+
+	private void artikliDetaljiPoIndeksu() {
+		int i;
+		Artikal artikal = new Artikal();
+		Stanje stanje;
+		artikliIzlistanje();
+		i = Alati.ucitajBroj("Unesite broj artikla čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
+				artikli.size()) - 1;
+		System.out.println(artikli.get(i).toString());
+		if(stanjaPostojanjeArtiklaNaStanju(artikal)) {
+			stanje = new Stanje();
+			stanje = stanjaNadjiPoArtikli(artikal);
+			System.out.println(stanje.ispisStanjaKodArtikala());
+		}
+		artikliIzbornik();
+	}
+	
+	private Stanje stanjaNadjiPoArtikli(Artikal artikal) {
+		Stanje s = new Stanje();
+		for(Stanje stanje : stanja) {
+			if(stanje.getArtikal().equals(artikal)) {
+				s = stanje;
+			}
+		}
+		return s;
+	}
+
+	private void artikliDetaljiPoNazivu() {
+		String uvjet;
+		int izbor;
+		Artikal artikal = new Artikal();
+		Stanje stanje = new Stanje();
+		List<Artikal> nadjeniArtikli = new ArrayList<Artikal>();
+		uvjet = Alati.ucitajString("Upišite naziv artikla koji tražite: ", porukaGreskePraznogUnosa, 0, 30);
+		nadjeniArtikli = artikliPronadjiPoUvjetu(uvjet);
+		if (!nadjeniArtikli.isEmpty()) {
+			artikliIzlistanje("Pronađeni artikli", nadjeniArtikli);
+			izbor = Alati.ucitajBroj("Unesite broj ispred artikla čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
+					nadjeniArtikli.size()) - 1;
+			Alati.ispisZaglavlja("Detalji artikla", false);
+			artikal = nadjeniArtikli.get(izbor);
+			System.out.println(artikal.toString());
+			if(stanjaPostojanjeArtiklaNaStanju(artikal)) {
+				stanje = new Stanje();
+				stanje = stanjaNadjiPoArtikli(artikal);
+				System.out.println(stanje.ispisStanjaKodArtikala());
+			}
+			artikliIzbornik();
+		} else {
+			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
+			if (Alati.daNe("Želite li pokušati opet? (da/ne): ", porukaGreskeDaNe)) {
+				artikliDetaljiPoNazivu();
+			} else {
+				artikliIzbornik();
+			}
 		}
 	}
 
@@ -1256,6 +1432,33 @@ public class Start {
 		return artikal;
 	}
 	
+	private Artikal artikliUcitajOstaleVrijednosti(Artikal a) {
+		int i;
+		double cijena, akcijskaCijena = a.getAkcijskaCijena();
+		boolean akcija;		
+		String opis = a.getOpis();
+		kategorijeIzlistanje();
+		i = Alati.ucitajBroj("\nUnesite broj ispred kategorije kojoj artikal pripada: ", 
+				porukaGreskeIzboraAkcije, 1, kategorije.size())-1;
+		cijena = Alati.ucitajDouble("Unesite cijenu artikla: ", porukaGreskePraznogUnosa, 0.01, 0);
+		akcija = Alati.daNe("Je li artikal trenutno na akciji? (da/ne): ", porukaGreskeDaNe);
+		if(akcija) {
+			if(Alati.daNe("Želite li unijeti akcijsku cijenu artikla? (da/ne): ", porukaGreskeDaNe)) {
+				akcijskaCijena = Alati.ucitajDouble("Unesite akcijsku cijenu artikla: ", porukaGreskePraznogUnosa, 0.01, 0);
+			}
+		}
+		if(Alati.daNe("Želite li unijeti opis artikla? (da/ne): ", porukaGreskeDaNe)) {
+			opis = Alati.ucitajString("Unesite opis artikla: ", porukaGreskePraznogUnosa, 1, 0);
+		}
+		a.setKategorija(kategorije.get(i));
+		a.setCijena(cijena);
+		a.setAkcija(akcija);
+		a.setAkcijskaCijena(akcijskaCijena);
+		a.setOpis(opis);
+		
+		return a;
+	}
+	
 	private void artikliIspisIzboraPretrage(String naslov) {
 		Alati.ispisZaglavlja(naslov, true);
 		System.out.println("1 za izlistanje svih artikala od kojih će te izabrati željeni");
@@ -1265,6 +1468,7 @@ public class Start {
 	private void artikliIzlistanje() {
 		if(!artikli.isEmpty()) {
 			int counter = 1;
+			Alati.ispisZaglavlja("Artikli koji se nalaze u bazi", false);
 			for(Artikal a  : artikli) {
 				System.out.println(counter++ + " " + a.ispis());
 			}
@@ -1299,4 +1503,114 @@ public class Start {
 		return artikli.indexOf(artikal);
 	}
 
+	/**
+	 * 
+	 * ARTIKLI KRAJ
+	 * 
+	 * STANJA
+	 * 
+	 */
+	
+	private void stanjaIzbornik() {
+		Alati.ispisZaglavlja("Rad sa lagerom", true);
+		System.out.println("1 za unos novog stanja određenog artikla");
+		System.out.println("2 za izmjenu postojećeg stanja određenog artikla");
+		System.out.println("3 za brisanje postojećeg stanja određenog artikla");
+		System.out.println("4 za pregled svih stanja svih artikala");
+		System.out.println("5 za pregled detalja stanja određenog artikla");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
+		stanjaOdabirAkcije();
+	}
+
+	private void stanjaOdabirAkcije() {
+		switch(Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+			case 1 -> stanjaUnosNovog();
+//		    case 2 -> stanjaIzmjena();
+//		    case 3 -> stanjaIzmjena();
+			case 4 -> {
+				stanjaIzlistanje();
+				stanjaIzbornik();
+				}
+//			case 5 -> stanjaDetalji();
+			case 6 -> adminGlavniIzbornik();			
+		}		
+	}
+
+	private void stanjaUnosNovog() {
+		Artikal artikal = new Artikal();
+		double naStanju, prodano;
+		if (!artikli.isEmpty()) {
+			Alati.ispisZaglavlja("Dodavanje novog artikla na lager", false);
+			artikliIspisIzboraPretrage("Odabir artikla");
+			artikal = stanjaUcitajOdabirPretrageArtikla();
+			if(!stanjaPostojanjeArtiklaNaStanju(artikal)) {
+				naStanju = Alati.ucitajDouble("Koliko je trenutno raspoloživo artikala (" + artikal.getNaziv() + "): ", 
+						porukaGreskePraznogUnosa, 1, 0);
+				prodano = Alati.ucitajBroj("Koliko je prodano artikala (" + artikal.getNaziv() + "): ", 
+						porukaGreskePraznogUnosa, 1, 0);
+				stanja.add(new Stanje(artikal, naStanju, prodano));
+				System.out.println("\nArtikal je dodan na lager");
+			}else {
+				System.out.println("\nArtikal se već nalazi na lageru");
+			}			
+		} else {
+			System.out.println(porukaGreskeNemaArtikala);
+		}
+		stanjaIzbornik();
+	}
+
+	private Artikal stanjaUcitajOdabirPretrageArtikla() {
+		Artikal a = new Artikal();
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+			case 1 -> a = stanjaOdabirArtiklaPoIndeksu();
+			case 2 -> a = stanjaOdabirArtiklaPoNazivu();
+		}	
+		return a;
+	}
+
+	private Artikal stanjaOdabirArtiklaPoNazivu() {
+		String uvjet;
+		int izbor;
+		Artikal artikal = new Artikal();
+		List<Artikal> nadjeniArtikli = new ArrayList<Artikal>();
+		uvjet = Alati.ucitajString("Upišite naziv artikla koji tražite: ", porukaGreskePraznogUnosa, 0, 30);
+		nadjeniArtikli = artikliPronadjiPoUvjetu(uvjet);
+		if (!nadjeniArtikli.isEmpty()) {
+			artikliIzlistanje("Pronađeni artikli", nadjeniArtikli);
+			izbor = Alati.ucitajBroj("Unesite broj ispred artikla koji želite dodati na lager: ", porukaGreskeIzboraAkcije, 1,
+					nadjeniArtikli.size()) - 1;
+			artikal = nadjeniArtikli.get(izbor);
+			
+		} else {
+			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
+			if (Alati.daNe("Želite li pokušati opet? (da/ne): ", porukaGreskeDaNe)) {
+				stanjaOdabirArtiklaPoNazivu();
+			} else {
+				stanjaIzbornik();
+			}
+		}
+		return artikal;
+	}
+
+	private Artikal stanjaOdabirArtiklaPoIndeksu() {
+		int i;
+		artikliIzlistanje();
+		i = Alati.ucitajBroj("Unesite broj artikla kojeg želite dodati na lager: ", porukaGreskeIzboraAkcije, 1,
+				artikli.size()) - 1;
+		return artikli.get(i);
+	}
+	
+	// POMOĆNE METODE STANJA
+	
+	private void stanjaIzlistanje() {
+		int counter = 1;
+		for(Stanje s : stanja) {
+			System.out.println(counter + " " + s.toString());
+		}		
+	}
+	
+	private boolean stanjaPostojanjeArtiklaNaStanju(Artikal a) {
+		return stanja.stream().filter(stanje -> stanje.getArtikal().equals(a)).findFirst().isPresent();
+	}
+	
 }

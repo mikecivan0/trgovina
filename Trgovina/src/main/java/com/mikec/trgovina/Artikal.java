@@ -103,6 +103,8 @@ public class Artikal extends Kategorija{
                 + "Kategorija: " + getKategorija().getNaziv();
     }
     
-    
+    public String ispis() {
+    	return naziv + " (" + getKategorija().getNaziv() + ")";
+    }
     
 }

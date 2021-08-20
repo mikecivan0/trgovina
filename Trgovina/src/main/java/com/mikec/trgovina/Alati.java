@@ -23,7 +23,7 @@ public class Alati {
     public static Date ucitajDatum(String poruka) {
         formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
         while (true) {
-            System.out.println(poruka);
+            System.out.print(poruka);
             try {
                 return formatDatuma.parse(scanner.nextLine());
             } catch (Exception e) {
@@ -35,13 +35,46 @@ public class Alati {
     public static int ucitajBroj(String poruka, String porukaGreske, int min, int max) {
         int broj = 0;
         while (true) {           
-            System.out.println(poruka);
+            System.out.print(poruka);
             try {
                 broj = Integer.parseInt(scanner.nextLine());
-                if (broj < min || broj > max) {
-                    System.out.println("Unesite broj između " + min + " i " + max);
-                    continue;
+                if(max!=0) {
+                	 if (broj < min || broj > max) {
+                         System.out.println("Unesite broj između " + min + " i " + max);
+                         continue;
+                     }
+                }else {
+                	if (broj < min) {
+                        System.out.println("Unesite broj veći od " + min);
+                        continue;
+                    }
+                }               
+                break;
+            } catch (Exception e) {
+                System.out.println(porukaGreske);
+            }
+        }
+        return broj;
+    }
+    
+    public static double ucitajDouble(String poruka, String porukaGreske, double min, double max) {
+        double broj = 0;
+        while (true) {           
+            System.out.print(poruka);
+            try {
+                broj = Double.parseDouble(scanner.nextLine());
+                if(max>0) {
+                	 if (broj < min || broj > max) {
+                         System.out.println("Unesite broj između " + min + " i " + max);
+                         continue;
+                     }
+                }else {
+                	 if (broj < min) {
+                         System.out.println("Unesite broj veći od " + min);
+                         continue;
+                     }                	
                 }
+               
                 break;
             } catch (Exception e) {
                 System.out.println(porukaGreske);
@@ -53,15 +86,23 @@ public class Alati {
     public static String ucitajString(String poruka, String porukaGreske, int minLength, int maxLength) {
         String unos = "";
         while (true) {
-            System.out.println(poruka);
+            System.out.print(poruka);
             unos = scanner.nextLine();
             if (unos.trim().equals("")) {
                 System.out.println(porukaGreske);
             }
-            if (unos.length() < minLength || unos.length() > maxLength) {
-                System.out.println("Najmanji dopušteni broj znakova je " + minLength + ", a najveći " + maxLength);
-                continue;
+            if(maxLength != 0) {
+            	 if (unos.length() < minLength || unos.length() > maxLength) {
+                     System.out.println("Najmanji dopušteni broj znakova je " + minLength + ", a najveći " + maxLength);
+                     continue;
+                 }
+            }else {
+            	if (unos.length() < minLength) {
+                    System.out.println("Najmanji dopušteni broj znakova je " + minLength);
+                    continue;
+                }
             }
+           
             break;
         }
         return unos;
@@ -70,7 +111,7 @@ public class Alati {
     public static boolean daNe(String poruka, String porukaGreske) {
         String unos;
         while (true) {
-            System.out.println(poruka);
+            System.out.print(poruka);
             unos = scanner.nextLine().trim().toLowerCase();
             if (unos.equals("da")) {
                 return true;
