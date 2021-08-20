@@ -1194,7 +1194,7 @@ public class Start {
 	private void artikliIzmjenaPoIndeksu() {
 		int i;
 		artikliIzlistanje();
-		i = Alati.ucitajBroj("Unesite broj artikla koji želite izmijeniti: ", porukaGreskeIzboraAkcije, 1, artikli.size())
+		i = Alati.ucitajBroj("\nUnesite broj artikla koji želite izmijeniti: ", porukaGreskeIzboraAkcije, 1, artikli.size())
 				- 1;
 		Artikal artikal = artikli.get(i);
 		artikliIzmjenaPodataka(artikal, i);
@@ -1266,7 +1266,7 @@ public class Start {
 	private void artikliBrisanjePoIndeksu() {
 		int i;
 		artikliIzlistanje();
-		i = Alati.ucitajBroj("Unesite broj artikla koji želite obrisati: ", porukaGreskeIzboraAkcije, 1, artikli.size())
+		i = Alati.ucitajBroj("\nUnesite broj artikla koji želite obrisati: ", porukaGreskeIzboraAkcije, 1, artikli.size())
 				- 1;
 		if (Alati.daNe("Želite li zaista obrisati artikal " + artikli.get(i).getNaziv() + " (da/ne): ",
 				porukaGreskeDaNe)) {
@@ -1288,7 +1288,7 @@ public class Start {
 		nadjeniArtikli = artikliPronadjiPoUvjetu(uvjet);
 		if (!nadjeniArtikli.isEmpty()) {
 			artikliIzlistanje("Pronađeni artikli", nadjeniArtikli);
-			izbor = Alati.ucitajBroj("Unesite broj artikla koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+			izbor = Alati.ucitajBroj("\nUnesite broj artikla koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 					nadjeniArtikli.size()) - 1;
 			indeksOdabranogArtikla = artikliIndeksArtiklaIzIzvorneListe(nadjeniArtikli.get(izbor));
 			if (Alati.daNe(
@@ -1332,25 +1332,16 @@ public class Start {
 		Artikal artikal = new Artikal();
 		Stanje stanje;
 		artikliIzlistanje();
-		i = Alati.ucitajBroj("Unesite broj artikla čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("\nUnesite broj artikla čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
 				artikli.size()) - 1;
-		System.out.println(artikli.get(i).toString());
+		artikal = artikli.get(i);
+		System.out.println(artikal.toString());
 		if(stanjaPostojanjeArtiklaNaStanju(artikal)) {
 			stanje = new Stanje();
-			stanje = stanjaNadjiPoArtikli(artikal);
+			stanje = stanjaNadjiPoArtiklu(artikal);
 			System.out.println(stanje.ispisStanjaKodArtikala());
 		}
 		artikliIzbornik();
-	}
-	
-	private Stanje stanjaNadjiPoArtikli(Artikal artikal) {
-		Stanje s = new Stanje();
-		for(Stanje stanje : stanja) {
-			if(stanje.getArtikal().equals(artikal)) {
-				s = stanje;
-			}
-		}
-		return s;
 	}
 
 	private void artikliDetaljiPoNazivu() {
@@ -1370,7 +1361,7 @@ public class Start {
 			System.out.println(artikal.toString());
 			if(stanjaPostojanjeArtiklaNaStanju(artikal)) {
 				stanje = new Stanje();
-				stanje = stanjaNadjiPoArtikli(artikal);
+				stanje = stanjaNadjiPoArtiklu(artikal);
 				System.out.println(stanje.ispisStanjaKodArtikala());
 			}
 			artikliIzbornik();
@@ -1383,7 +1374,6 @@ public class Start {
 			}
 		}
 	}
-
 
 	// POMOĆNE METODE ARTIKALA
 	// unos novog
@@ -1595,7 +1585,7 @@ public class Start {
 	private Artikal stanjaOdabirArtiklaPoIndeksu() {
 		int i;
 		artikliIzlistanje();
-		i = Alati.ucitajBroj("Unesite broj artikla kojeg želite dodati na lager: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("\nUnesite broj artikla kojeg želite dodati na lager: ", porukaGreskeIzboraAkcije, 1,
 				artikli.size()) - 1;
 		return artikli.get(i);
 	}
@@ -1611,6 +1601,16 @@ public class Start {
 	
 	private boolean stanjaPostojanjeArtiklaNaStanju(Artikal a) {
 		return stanja.stream().filter(stanje -> stanje.getArtikal().equals(a)).findFirst().isPresent();
+	}
+	
+	private Stanje stanjaNadjiPoArtiklu(Artikal artikal) {
+		Stanje s = new Stanje();
+		for(Stanje stanje : stanja) {
+			if(stanje.getArtikal().equals(artikal)) {
+				s = stanje;
+			}
+		}
+		return s;
 	}
 	
 }

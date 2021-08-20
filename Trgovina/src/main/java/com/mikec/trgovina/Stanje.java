@@ -82,7 +82,7 @@ public class Stanje extends Artikal{
     
     public String ispisStanjaKodArtikala() {
         return "Raspoloživo: " + raspolozivo 
-        		+ ",\nProdano: " + prodano;
+        		+ "\nProdano: " + prodano;
     }
     
     public String ispisStanjaKodDetalja() {
