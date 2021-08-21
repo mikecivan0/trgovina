@@ -75,9 +75,16 @@ public class Stanje extends Artikal{
 
     @Override
     public String toString() {
-        return this.getArtikal().getNaziv() + " (" + this.getArtikal().getKategorija().getNaziv() + "): "
+        return getArtikal().getNaziv() + " (" + this.getArtikal().getKategorija().getNaziv() + "): "
                 + "raspoloživo: " + raspolozivo 
                 + ", prodano: " + prodano;
+    }
+    
+    public String detalji() {
+        return "Artikal: " + getArtikal().getNaziv() 
+        		+ "\nKategorija: " + this.getArtikal().getKategorija().getNaziv()
+                + "\nRaspoloživo: " + raspolozivo 
+                + "\nProdano: " + prodano;
     }
     
     public String ispisStanjaKodArtikala() {
