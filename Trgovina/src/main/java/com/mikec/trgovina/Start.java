@@ -213,7 +213,7 @@ public class Start {
 		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 5)) {
 			case 1 -> kategorijeIzbornik();
 	        case 2 -> artikliIzbornik();
-//            case 3 -> klijentiIzbornik();
+            case 3 -> klijentiIzbornik();
 //            case 4 -> racuniIzbornik();
 		case 5 -> {
 				logout();
@@ -1735,5 +1735,48 @@ public class Start {
 	
 	private int stanjaIndeksStanjaIzIzvorneListe(Stanje stanje) {
 		return stanja.indexOf(stanje);
+	}
+	
+	/**
+	 * 
+	 * STANJA KRAJ
+	 * 
+	 * KLIJENTI
+	 * 
+	 */
+	
+	
+	private void klijentiIzbornik() {
+		Alati.ispisZaglavlja("Rad sa podacima klijenata", true);
+		System.out.println("1 za unos novog klijenta");
+		System.out.println("2 za izmjenu podataka postojećeg klijenta");
+		System.out.println("3 za brisanje postojećeg klijenta");
+		System.out.println("4 za pregled svih klijenata");
+		System.out.println("5 za pregled detalja postojećeg klijenta");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
+		klijentiOdabirAkcije();
+	}
+
+	private void klijentiOdabirAkcije() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+//		case 1 -> korisniciUnosNovog();
+//		case 2 -> korisniciIzmjena();
+//		case 3 -> korisniciBrisanje();
+//		case 4 -> {
+//			korisniciIzlistanje();
+//			korisniciIzbornik();
+//		}
+//		case 5 -> {
+//			korisniciDetalji();
+//			korisniciIzbornik();
+//		}
+		case 6 -> {
+				if(trenutniKorisnik.getRazina() == 1) {
+					djelatnikGlavniIzbornik();
+				}else {
+					adminGlavniIzbornik();
+				}
+			}
+		}		
 	}
 }
