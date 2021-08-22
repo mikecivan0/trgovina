@@ -6,7 +6,7 @@ package com.mikec.trgovina;
  */
 public class Klijent extends Osoba{
     private Osoba osoba;
-    private String ulicaiKbr;
+    private String ulicaIKbr;
     private String mjesto;
     private String pbr;
 
@@ -15,11 +15,11 @@ public class Klijent extends Osoba{
     
     public Klijent(
             Osoba osoba, 
-            String ulicaiKbr, 
+            String ulicaIKbr, 
             String mjesto, 
             String pbr) {
         this.osoba = osoba;
-        this.ulicaiKbr = ulicaiKbr;
+        this.ulicaIKbr = ulicaIKbr;
         this.mjesto = mjesto;
         this.pbr = pbr;
     }
@@ -29,11 +29,11 @@ public class Klijent extends Osoba{
             String prezime, 
             String telefon, 
             String email, 
-            String ulicaiKbr, 
+            String ulicaIKbr, 
             String mjesto, 
             String pbr) {
         super(ime, prezime, telefon, email);
-        this.ulicaiKbr = ulicaiKbr;
+        this.ulicaIKbr = ulicaIKbr;
         this.mjesto = mjesto;
         this.pbr = pbr;
     }
@@ -46,12 +46,12 @@ public class Klijent extends Osoba{
         this.osoba = osoba;
     }
 
-    public String getUlicaiKbr() {
-        return ulicaiKbr;
+    public String getUlicaIKbr() {
+        return ulicaIKbr;
     }
 
-    public void setUlicaiKbr(String ulicaiKbr) {
-        this.ulicaiKbr = ulicaiKbr;
+    public void setUlicaIKbr(String ulicaiKbr) {
+        this.ulicaIKbr = ulicaiKbr;
     }
 
     public String getMjesto() {
@@ -73,13 +73,17 @@ public class Klijent extends Osoba{
     @Override
     public String toString() {
         return getOsoba().toString()
-                + "\nUlica i kućni broj: " + ulicaiKbr + "\n"
+                + "\nUlica i kućni broj: " + ulicaIKbr + "\n"
                 + "Mjesto: " + mjesto + "\n"
                 + "Poštanski broj: " + pbr;
     }
 
     public String adresa(){
-        return ulicaiKbr + ", " + pbr + " " + mjesto;
+        return ulicaIKbr + ", " + pbr + " " + mjesto;
+    }
+    
+    public String klijentZaPrikaz(){
+        return this.getOsoba().imeIPrezime() + ", " + this.adresa();
     }
     
 }
