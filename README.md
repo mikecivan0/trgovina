@@ -237,17 +237,16 @@ Rad sa aplikacijom je podijeljen na javni i korisnički dio. Korisnički dio ima
 			- raspoloživo
 			- prodano
 			
-		Ovdje je moguće:
-		
-			- dodavanje artikla na lager
-				- izbor atikla se može izvršti preko indeksa ili naziva
-				- vrši se provjera ukoliko je arikal već uveden na stanje
-			- izmjena stanja artikla
-				- izbor atikla se može izvršti preko indeksa ili naziva
-			- brisanje artikla sa stanja
-				- izbor arikla se vrši preko naziva
-			- pregled svih artikala na stanju
-				- izlistavaju se svi artikli sa podacima sa stanja
-			- pregled detalja stanja određenog artikla
-				- izbor arikla se vrši preko naziva 
+		Ovdje je moguće:		
+		- dodavanje artikla na lager
+			- izbor artikla se može izvršti preko indeksa ili naziva
+			- vrši se provjera ukoliko je arikal već uveden na stanje
+		- izmjena stanja artikla
+			- izbor atikla se može izvršti preko indeksa ili naziva
+		- brisanje artikla sa stanja
+			- izbor arikla se vrši preko naziva
+		- pregled svih artikala na stanju
+			- izlistavaju se svi artikli sa podacima sa stanja
+		- pregled detalja stanja određenog artikla
+			- izbor arikla se vrši preko naziva 
 			
