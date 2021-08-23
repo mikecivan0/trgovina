@@ -8,6 +8,7 @@ public class Stavka extends Artikal {
     private Racun racun;
     private Artikal artikal;
     private double kolicina;
+    private double cijenaPoKomadu;
     private double nettoIznos;
     private double iznosPoreza;
     private double ukupanIznos;
@@ -21,34 +22,6 @@ public class Stavka extends Artikal {
             double kolicina) {
         this.racun = racun;
         this.artikal = artikal;
-        this.kolicina = kolicina;
-    }
-
-    public Stavka(
-            Racun racun, 
-            Kategorija kategorija, 
-            String naziv, 
-            double cijena, 
-            boolean akcija, 
-            double akcijskaCijena, 
-            String opis,
-            double kolicina) {
-        super(kategorija, naziv, cijena, akcija, akcijskaCijena, opis);
-        this.racun = racun;
-        this.kolicina = kolicina;
-    }
-    
-    public Stavka(
-            Racun racun, 
-            String kategorija, 
-            String naziv, 
-            double cijena, 
-            boolean akcija, 
-            double akcijskaCijena, 
-            String opis,
-            double kolicina) {
-        super(kategorija, naziv, cijena, akcija, akcijskaCijena, opis);
-        this.racun = racun;
         this.kolicina = kolicina;
     }
 
@@ -75,22 +48,55 @@ public class Stavka extends Artikal {
     public void setKolicina(double kolicina) {
         this.kolicina = kolicina;
     }
+    
+    public double getNetto() {
+    	return nettoIznos;
+    }
+    
+    public double getPorez() {
+    	return iznosPoreza;
+    }
+    
+    public double getUkupno() {
+    	return ukupanIznos;
+    }
 
     public String ispisReda() {
-        String ispis;         
-        ispis = this.getArtikal().getNaziv() + "\t\t"; 
+        String ispis;     
+        double cijena;
+        cijena = (this.getArtikal().isAkcija()) ? this.getArtikal().getAkcijskaCijena() : this.getArtikal().getCijena();       
+        ispis = this.getArtikal().getNaziv() + razmak(this.getArtikal().getNaziv()); 
         ispis += kolicina + "\t\t";
+        ispis += cijena + "\t\t\t";
         ispis += nettoIznos + "\t\t";
         ispis += iznosPoreza + "\t\t";
         ispis += ukupanIznos;        
         return ispis;
     }
     
-    public void izracunOstalihVrijednosti(double stopaPoreza){
+    private String razmak(String naziv) {
+    	String razmak = "";
+		if(naziv.length()<8) {
+			razmak += "\t\t\t\t";
+		}		
+		if(naziv.length()>=8 && naziv.length()<16) {
+			razmak += "\t\t\t";
+		}		
+		if(naziv.length()>=16 && naziv.length()<24) {
+			razmak += "\t\t";
+		}		
+		if(naziv.length()>=24) {
+			razmak += "\t";
+		}
+		return razmak;
+	}
+
+	public void izracunOstalihVrijednosti(double stopaPoreza){
         double nettoCijenaPoKomadu = (this.getArtikal().isAkcija()) ?  
                 this.getArtikal().getAkcijskaCijena() : 
                 this.getArtikal().getCijena();
-        nettoIznos = nettoCijenaPoKomadu*this.kolicina;       
+        cijenaPoKomadu = nettoCijenaPoKomadu;
+        nettoIznos = cijenaPoKomadu*this.kolicina;       
         iznosPoreza = nettoIznos*(stopaPoreza/100);
         ukupanIznos = nettoIznos+iznosPoreza;
     }

@@ -13,6 +13,7 @@ public class Racun extends Klijent{
     private double netto;
     private double porez;
     private double ukupno;
+    private boolean storno;
 
     public Racun() {
     }
@@ -23,13 +24,15 @@ public class Racun extends Klijent{
             Date datum, 
             double netto, 
             double porez, 
-            double ukupno) {
+            double ukupno,
+            boolean storno) {
         this.klijent = klijent;
         this.broj = broj;
         this.datum = datum;
         this.netto = netto;
         this.porez = porez;
         this.ukupno = ukupno;
+        this.storno = storno;
     }
 
     public Racun(
@@ -41,13 +44,15 @@ public class Racun extends Klijent{
             Date datum,             
             double netto, 
             double porez, 
-            double ukupno) {
+            double ukupno,
+            boolean storno) {
         super(osoba, ulicaiKbr, mjesto, pbr);
         this.broj = broj;
         this.datum = datum;
         this.netto = netto;
         this.porez = porez;
         this.ukupno = ukupno;
+        this.storno = storno;
     }
 
     public Racun(
@@ -62,13 +67,15 @@ public class Racun extends Klijent{
             Date datum, 
             double netto, 
             double porez, 
-            double ukupno) {
+            double ukupno,
+            boolean storno) {
         super(ime, prezime, telefon, email, ulicaiKbr, mjesto, pbr);
         this.broj = broj;
         this.datum = datum;
         this.netto = netto;
         this.porez = porez;
         this.ukupno = ukupno;
+        this.storno = storno;
     }
 
     public Klijent getKlijent() {
@@ -118,14 +125,43 @@ public class Racun extends Klijent{
     public void setUkupno(double ukupno) {
         this.ukupno = ukupno;
     }
+    
+    public boolean IsStorno() {
+        return storno;
+    }
 
-    @Override
-    public String toString() {
+    public void setStorno(boolean storno) {
+        this.storno = storno;
+    }
+
+    public String zaglavlje() {    	
         return "Datum računa: " + Alati.hrDatum(datum) + "\n"
                 + "Broj računa: " + broj + "\n"
-                + "Klijent: " + this.getOsoba().imeIPrezime() + this.getKlijent().adresa() + "\n"
-                + "Netto iznos: " + netto + "\n"
+                + "Klijent: " + this.getKlijent().getOsoba().imeIPrezime() + "\n"
+                + "Adresa: " + this.getKlijent().adresa() + "\n";
+    }  
+    
+    public String sumiranje() {
+    	String ispis;
+        ispis = "Netto iznos: " + netto + "\n"
                 + "Iznos poreza: " + porez + "\n"
                 + "Ukupno za naplatu: " + ukupno;
-    }    
+        if(IsStorno()) {
+        	ispis += "\n\nRačun je storniran!";
+        }
+        return ispis;
+    }  
+    
+    public String ispis() {
+    	return "Datum: " + Alati.hrDatum(datum) + ", " + this.getKlijent().getOsoba().imeIPrezime() + ", " + ukupno;
+    }
+    
+    public String ispisKodDetaljaKlijenta() {
+    	String ispis;
+    	ispis = "Datum: " + Alati.hrDatum(datum) + ", broj računa: " + broj + ", iznos: "  + ukupno;
+    	if(IsStorno()) {
+        	ispis += ", storno";
+        }
+    	return ispis;
+    }
 }
