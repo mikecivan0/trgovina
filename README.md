@@ -231,13 +231,14 @@ Rad sa aplikacijom je podijeljen na javni i korisnički dio. Korisnički dio ima
 	
 	
 	
-	- rad sa lagerom (stanjem)
+	- rad sa lagerom (stanjem)	
 		- podaci koje je moguće unositi: 
 			- artikal
 			- raspoloživo
 			- prodano
 			
 		Ovdje je moguće:
+		
 			- dodavanje artikla na lager
 				- izbor atikla se može izvršti preko indeksa ili naziva
 				- vrši se provjera ukoliko je arikal već uveden na stanje
